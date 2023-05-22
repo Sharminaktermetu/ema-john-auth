@@ -1,9 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { AuthContext } from '../../providers/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
+  const [show, setShow]=useState(false)
     const {logIn}=useContext(AuthContext)
+    const navigate = useNavigate()
+    const from = location.state?.from?.pathname || '/'
     const handleLogin=event=>{
         event.preventDefault();
         const form= event.target;
@@ -14,6 +18,8 @@ const Login = () => {
         .then(result=>{
             const loggedInUser= result.user;
             console.log(loggedInUser);
+            form.reset()
+            navigate(from,{replace:true})
         })
         .catch(error=>{
             console.log(error);
@@ -30,7 +36,11 @@ const Login = () => {
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password" name='password' placeholder="Password" />
+        <Form.Control type={show?"text":"password"} name='password' placeholder="Password" />
+        <p onClick={()=>setShow(!show)}>
+         <b> {show?<span>Hide</span>:<span>Show</span>}</b>
+          
+          </p>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicCheckbox">
         <Form.Check type="checkbox" label="Check me out" />
