@@ -2,27 +2,32 @@ import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { AuthContext } from '../../providers/AuthProvider';
-const Login = () => {
-    const {logIn}=useContext(AuthContext)
-    const handleLogin=event=>{
+
+const Signup = () => {
+    const {createUser}= useContext(AuthContext)
+    const handleSubmit=event=>{
         event.preventDefault();
         const form= event.target;
+        const name= form.name.value;
         const email= form.email.value;
         const password= form.password.value;
-        console.log(email,password);
-        logIn(email,password)
+       
+        createUser(email, password)
         .then(result=>{
-            const loggedInUser= result.user;
-            console.log(loggedInUser);
+            const loggedUser= result.user;
+            console.log(loggedUser);
         })
         .catch(error=>{
             console.log(error);
         })
+
     }
     return (
         <div className='w-50 m-auto container p-5'>
-        <Form className='w-75' onSubmit={handleLogin}>
-           <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form className='w-75' onSubmit={handleSubmit}>
+        <Form.Label>Your name</Form.Label>
+        <Form.Control type="text" name='name' placeholder="Enter name" />
+      <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
  
         <Form.Control type="email" name='email' placeholder="Enter email" />
@@ -39,8 +44,9 @@ const Login = () => {
         Submit
       </Button>
     </Form>
+
         </div>
     );
 };
 
-export default Login;
+export default Signup;
